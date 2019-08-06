@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  db:
+    image: mysql:5.5
+    restart: always
+    container_name: global_mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${password}
+      - MYSQL_USER=root
+    volumes:
+      - /usr/local/mysql:/var/lib/mysql
+    networks:
+      - nginx_proxy
+
+networks:
+  nginx_proxy:
+    external: true

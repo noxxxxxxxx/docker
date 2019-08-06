@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  nginx-proxy:
+    image: nginx
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./wordpress.conf:/etc/nginx/wordpress.conf:ro
+      - ./ssl.conf:/etc/nginx/ssl.conf:ro
+      - ./fastcgi.conf:/etc/nginx/fastcgi.conf:ro
+      - ./enable-php.conf:/etc/nginx/enable-php.conf:ro
+      - ./conf.d:/etc/nginx/conf.d
+      - ./log:/var/log/nginx
+      - ./html:/usr/share/nginx/html
+      - /phpsock:/tmp
+      - /root/.acme.sh:/root/.acme.sh
+    networks:
+      - nginx_proxy
+
+networks:
+  nginx_proxy:
+    external: true
+

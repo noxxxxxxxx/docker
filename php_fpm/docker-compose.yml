@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  php:
+    build: ./
+    image: php:fpm
+    container_name: "docker-php"
+    volumes:
+      - /home/docker/nginx/html:/var/www/html
+      - ./zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - /phpsock:/var/run
+    networks:
+      - nginx_proxy
+
+networks:
+  nginx_proxy:
+    external: true
