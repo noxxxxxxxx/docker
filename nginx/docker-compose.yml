@@ -17,7 +17,7 @@ services:
       - ./log:/var/log/nginx
       - ./html:/usr/share/nginx/html
       - /phpsock:/tmp
-      - /root/.acme.sh:/root/.acme.sh
+      #- /root/.acme.sh:/root/.acme.sh
     networks:
       - nginx_proxy
 

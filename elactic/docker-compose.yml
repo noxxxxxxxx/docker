@@ -1,0 +1,54 @@
+version: '3.7'
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=docker-es-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/log:/var/log
+    ports:
+      - 9200:9200
+    networks:
+      - nginx_proxy
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.3.1
+    container_name: logstash
+    volumes:
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logstash/config:/usr/share/logstash/config/
+      - ./logstash/pigline:/usr/share/logstash/pipeline/
+      # - ./logstash/logstash.keystore:/usr/share/logstash/config/logstash.keystore
+      # - ./logstash/ca.crt:/usr/share/logstash/config/certs/ca/ca.crt
+    networks:
+      - nginx_proxy
+    depends_on: ['es01']
+    healthcheck:
+      test: bin/logstash -t
+      interval: 60s
+      timeout: 50s
+      retries: 5
+    command: logstash -f /usr/share/logstash/pipeline/logstash/logstash.conf
+
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:7.0.1
+  #   container_name: kibana
+  #   environment:
+  #     SERVER_NAME: localhost
+  #     ELASTICSEARCH_HOSTS: http://es01:9200/
+  #   ports:
+  #     - 5601:5601
+
+networks:
+  nginx_proxy:
+    external: true

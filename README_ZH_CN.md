@@ -5,10 +5,11 @@
 ## 使用步骤
 
 1. Linux 系统在 home 目录下 `git clone` 该仓库
-2. MacOs 系统由于 Home 目录 Apple 默认不希望用户去使用创建文件，应此在 Document 目录下 `git clone` 该仓库使用 `macos` 分支
+2. MacOs 系统由于 Home 目录默认不希望用户去使用，创建文件，应此在 Document 目录下 `git clone` 该仓库并使用 `macos` 分支
 3. Mysql 容器需要配置密码
 4. 进入相应的目录使用 `docker-compose -d up` 启动对应的容器
-5. 先启动 php_fpm、MySQL 容器再启动 Nginx
+5. 默认注释了对 php_fpm 的引用，因此可以直接启动 Nginx
+6. 如果需要 php_fpm、MySQL，请优先启动这两个容器再启动 Nginx
 
 ## Docker 安装地址
 
@@ -20,7 +21,7 @@
 
 ## 创建网络
 
-bridge 网络用于 Nginx 和 Mysql php-fpm 相互联通
+bridge 网络用于 Nginx 和 Mysql php-fpm 以及后续接入的容器相互联通
 
 `docker network create -d bridge nginx_proxy`
 

@@ -2,6 +2,8 @@
 
 You can use this repo to build your LNMP quickly by using docker.
 
+You can easily start Nginx container without php_fpm, if you want to use wordpress and php_fpm, simply remove the annotation in Nginx config file. 
+
 ## Usage
 
 ### Linux
@@ -28,7 +30,7 @@ You need install these tools before you start to use.
 
 ## Network
 
-Use bridge network to connect container
+Use bridge network to connect container if they join the same network.
 
 ```bash
 docker network create -d bridge nginx_proxy
@@ -48,7 +50,7 @@ mv config.inc.sample.php config.inc.php
 
 vim config.inc.php
 
-# add $cfg['AllowArbitraryServer']=true;
+add $cfg['AllowArbitraryServer']=true;
 ```
 
 3. if nginx container is running, visit `http://ip/phpmyadmin`
