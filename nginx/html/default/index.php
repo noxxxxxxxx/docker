@@ -1,2 +1,2 @@
 <?php
-echo "default index.html";
+echo "default index.php";
