@@ -18,6 +18,8 @@ services:
       - ./html:/usr/share/nginx/html
       #- /phpsock:/tmp
       #- /root/.acme.sh:/root/.acme.sh
+    environment: 
+      TZ: 'Asia/shanghai'
     networks:
       - nginx_proxy
 
