@@ -6,9 +6,9 @@ services:
     image: php:fpm
     container_name: "docker-php"
     volumes:
-      - /home/docker/nginx/html:/var/www/html
+      - /Users/${account}/Documents/docker/nginx/html:/var/www/html
       - ./zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
-      - /phpsock:/var/run
+      - ./phpsock:/var/run
     networks:
       - nginx_proxy
 
