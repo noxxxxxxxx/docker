@@ -67,6 +67,18 @@ server {
 }
 ```
 
+## PHP Composer
+
+Composer install
+
+```bash
+docker exec -it docker-php /bin/bash
+
+cd target/directory
+
+composer install
+```
+
 ## MySQL container
 
 before you start mysql container, you need modify mysql root password
