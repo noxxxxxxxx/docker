@@ -65,6 +65,18 @@ server {
 }
 ```
 
+## PHP Composer
+
+进入容器，执行 composer 命令
+
+```bash
+docker exec -it docker-php /bin/bash
+
+cd target/directory
+
+composer install
+```
+
 ## MySQL 容器
 
 1. MySQL 容器启动前需要添加 root 密码， 默认使用 root 用户，可以自行修改
