@@ -81,7 +81,11 @@ composer install
 
 1. MySQL 容器启动前需要添加 root 密码， 默认使用 root 用户，可以自行修改
 
-## jenkins 容器
+## Gitea
+
+GitLab 的替代品，占用内容少，如果想使用单独的 mysql 容器可以参照官方的 docker-compose.yml 配置文件
+
+## Jenkins 容器
 
 ```bash
 chown -R 1000:1000 /home/docker/jenkins/jenkins-data

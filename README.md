@@ -83,7 +83,12 @@ composer install
 
 before you start mysql container, you need modify mysql root password
 
-## jenkins container
+
+## Gitea container
+
+Like GitLab but less memory useage. If you want to use the seperate database container, you can use the official docker-compose.yml file.
+
+## Jenkins container
 
 ```bash
 # run this command before you start jenkins container
