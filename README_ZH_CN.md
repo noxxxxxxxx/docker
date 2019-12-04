@@ -84,6 +84,7 @@ composer install
 ## jenkins 容器
 
 ```bash
+# 设置权限，否则无法运行
 chown -R 1000:1000 /home/docker/jenkins/jenkins-data
 
 docker-compose up -d
