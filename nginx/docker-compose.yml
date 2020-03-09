@@ -19,7 +19,7 @@ services:
       #- /phpsock:/tmp
       #- /root/.acme.sh:/root/.acme.sh
     environment: 
-      TZ: 'Asia/shanghai'
+      TZ: 'Asia/Shanghai'
     networks:
       - nginx_proxy
 
