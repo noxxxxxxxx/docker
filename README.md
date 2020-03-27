@@ -2,6 +2,11 @@
 
 You can use this repo to build your LNMP quickly by using docker.
 
+## Support
+
+- [x] Laravel
+- [x] Wordpress
+
 ## Usage
 
 ### Linux
@@ -15,7 +20,7 @@ git clone https://github.com/noxxxxxxxx/docker.git
 ```bash
 git clone https://github.com/noxxxxxxxx/docker.git
 
-# use macos branch, because normally the system not recommend to modify home directory, so we choose document directory
+# use macos branch, normally the system not recommend to modify home directory, so we choose document directory
 git checkout macos
 ```
 
@@ -83,7 +88,7 @@ composer install
 
 before you start mysql container, you need modify mysql root password
 
-## jenkins container
+## Jenkins container
 
 ```bash
 # run this command before you start jenkins container

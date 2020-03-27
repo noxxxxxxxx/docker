@@ -2,6 +2,11 @@
 
 通过 Docker 容器快速创建 LNMP 环境。
 
+## 支持的应用
+
+- [x] Laravel
+- [x] Wordpress
+
 ## 使用步骤
 
 1. Linux 系统在 home 目录下 `git clone` 该仓库
@@ -81,7 +86,7 @@ composer install
 
 1. MySQL 容器启动前需要添加 root 密码， 默认使用 root 用户，可以自行修改
 
-## jenkins 容器
+## Jenkins 容器
 
 ```bash
 chown -R 1000:1000 /home/docker/jenkins/jenkins-data
