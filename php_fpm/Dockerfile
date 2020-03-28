@@ -22,7 +22,7 @@ RUN apt-get clean \
         deb-src http://mirrors.aliyun.com/debian-security buster/updates main \n \
         deb http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib \n \
         deb-src http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib" > /etc/apt/sources.list \
-    # update and install some lib
+    # update and install libs
     && apt-get update \
     && apt-get install -y openssl unzip \
     # PHP extension
