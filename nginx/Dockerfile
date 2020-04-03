@@ -6,6 +6,9 @@ FROM nginx:alpine AS builder
 # Our NGX_HTTP_ECHO_MODULE version
 ENV NGX_HTTP_ECHO_MODULE_VERSION 0.62rc1
 
+# If download slowly you can choose other source
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+
 # Download sources
 RUN wget "http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -O nginx.tar.gz && \
   wget "https://github.com/openresty/echo-nginx-module/archive/v${NGX_HTTP_ECHO_MODULE_VERSION}.tar.gz" -O echo.tar.gz
@@ -42,5 +45,6 @@ COPY --from=builder /usr/local/nginx/modules/ngx_http_echo_module.so /usr/local/
 # COPY nginx.conf /etc/nginx/nginx.conf
 # COPY default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
+USER www-data
 STOPSIGNAL SIGTERM
 CMD ["nginx", "-g", "daemon off;"]
