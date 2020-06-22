@@ -9,6 +9,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_USER=${MYSQL_USER}
+      - TZ=${TIME_ZONE}
     volumes:
       - /usr/local/mysql:/var/lib/mysql
     networks:
