@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+  rabbitmq:
+    container_name: yep-rabbit
+    image: rabbitmq:3-management-alpine
+    hostname: yep-rabbit
+    restart: always
+    volumes:
+      # - ./etc/definitions.json:/etc/rabbitmq/definitions.json
+      # - ./etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./data:/var/lib/rabbitmq/mnesia/rabbit@yep-rabbit
+      - ./logs:/var/log/rabbitmq/log
+    environment:
+        # RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+        RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+        RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+        TZ: ${TIME_ZONE}
+    ports:
+      - 5672:5672 # client 端通信口
+      # - 15672:15672 # 管理界面ui端口
+    networks:
+      - nginx_proxy
+
+networks:
+  nginx_proxy:
+    external: true
