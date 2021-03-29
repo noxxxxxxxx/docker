@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./data:/var/www/html
+    environment: 
+      TZ: ${TIME_ZONE}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_HOST: ${MYSQL_HOST}
+    networks:
+      - nginx_proxy
+
+networks:
+  nginx_proxy:
+    external: true
+
