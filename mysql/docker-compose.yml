@@ -7,8 +7,9 @@ services:
     restart: always
     container_name: global_mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${PASSWORD}
-      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - TZ=${TIME_ZONE}
     volumes:
       -  ./mysql_data:/var/lib/mysql
     networks:

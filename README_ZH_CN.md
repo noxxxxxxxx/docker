@@ -85,10 +85,14 @@ composer install
 ## MySQL 容器
 
 1. MySQL 容器启动前需要添加 root 密码， 默认使用 root 用户，可以自行修改
+2. 支持远程链接
+    - 使用前需要取消 `nginx.conf` 中的注释
+
 
 ## Jenkins 容器
 
 ```bash
+# 设置权限，否则无法运行
 chown -R 1000:1000 /home/docker/jenkins/jenkins-data
 
 docker-compose up -d

@@ -1,2 +1,2 @@
 <?php
-echo phpinfo();
+echo "default index.php";

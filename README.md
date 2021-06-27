@@ -86,7 +86,10 @@ composer install
 
 ## MySQL container
 
-before you start mysql container, you need modify mysql root password
+Before you start mysql container, you need modify mysql root password
+
+1. Support remote connect
+    - If you want to connect MySql container from remote, you can uncomment the code from `nginx.conf`
 
 ## Jenkins container
 
