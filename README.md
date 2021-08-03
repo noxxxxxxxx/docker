@@ -2,7 +2,23 @@
 
 You can use this repo to build your LNMP quickly by using docker.
 
-## Usage
+For now many softwares have been uesd in docker container.
+
+If you want to add new container, feel free to make PR .
+
+Support：
+
+- Nginx   ✅ 
+- Mysql   ✅ 
+- PHP-FPM ✅ 
+- Gitea   ✅ 
+- Jenkins ✅ 
+- Redis   ✅ 
+
+
+[中文文档](https://github.com/noxxxxxxxx/docker/blob/master/README_ZH_CN.md)
+
+## LNMP Usage
 
 ### Linux
 
@@ -21,14 +37,14 @@ git checkout macos
 
 ## Prepare
 
-You need install these tools before you start to use.
+You need install these tools before you start to create Docker container.
 
 - Docker
-- docker compose
+- Docker Compose
 
 ## Network
 
-Use bridge network to connect container
+Use bridge network to connect each container
 
 ```bash
 docker network create -d bridge nginx_proxy
@@ -36,9 +52,13 @@ docker network create -d bridge nginx_proxy
 
 ## Let'sEncrypt
 
+If no need to use https, ignore this part.
+
 Install [acme.sh](https://github.com/Neilpang/acme.sh)
 
 ## phpMyAdmin
+
+You can connect mysql container through Nginx.
 
 1. unzip your phpmyadmin file in `nginx/html/default/phpmyadmin`
 2. setting config file
@@ -58,7 +78,7 @@ vim config.inc.php
 
 1. `DB_HOST` in `wp-config.php` is mysql container name `global_mysql`
 
-## PHP
+### Nginx PHP config
 
 ```nginx
 server {
@@ -97,6 +117,15 @@ Like GitLab but less memory useage. If you want to use the seperate database con
 
 chown -R 1000:1000 /home/docker/jenkins/jenkins-data
 
+docker-compose up -d
+```
+
+## Redis container
+
+1. `./data` redis data
+2. `redis.conf` redis config
+
+```bash
 docker-compose up -d
 ```
 
