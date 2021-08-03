@@ -11,7 +11,7 @@ services:
     volumes:
       - ${NGINXASSETS}:/var/www/html
       - ./zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
-      - ./phpsock:/var/run
+      - /phpsock:/var/run
     networks:
       - nginx_proxy
 
