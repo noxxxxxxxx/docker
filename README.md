@@ -2,12 +2,23 @@
 
 You can use this repo to build your LNMP quickly by using docker.
 
-## Support
+For now many softwares have been uesd in docker container.
 
-- [x] Laravel
-- [x] Wordpress
+If you want to add new container, feel free to make PR .
 
-## Usage
+Support：
+
+- Nginx   ✅ 
+- Mysql   ✅ 
+- PHP-FPM ✅ 
+- Gitea   ✅ 
+- Jenkins ✅ 
+- Redis   ✅ 
+
+
+[中文文档](https://github.com/noxxxxxxxx/docker/blob/master/README_ZH_CN.md)
+
+## LNMP Usage
 
 ### Linux
 
@@ -20,20 +31,20 @@ git clone https://github.com/noxxxxxxxx/docker.git
 ```bash
 git clone https://github.com/noxxxxxxxx/docker.git
 
-# use macos branch, normally the system not recommend to modify home directory, so we choose document directory
+# use macos branch, because normally the system not recommend to modify home directory, so we choose document directory
 git checkout macos
 ```
 
 ## Prepare
 
-You need install these tools before you start to use.
+You need install these tools before you start to create Docker container.
 
 - Docker
-- docker compose
+- Docker Compose
 
 ## Network
 
-Use bridge network to connect container
+Use bridge network to connect each container
 
 ```bash
 docker network create -d bridge nginx_proxy
@@ -41,9 +52,13 @@ docker network create -d bridge nginx_proxy
 
 ## Let'sEncrypt
 
+If no need to use https, ignore this part.
+
 Install [acme.sh](https://github.com/Neilpang/acme.sh)
 
 ## phpMyAdmin
+
+You can connect mysql container through Nginx.
 
 1. unzip your phpmyadmin file in `nginx/html/default/phpmyadmin`
 2. setting config file
@@ -63,7 +78,7 @@ vim config.inc.php
 
 1. `DB_HOST` in `wp-config.php` is mysql container name `global_mysql`
 
-## PHP
+### Nginx PHP config
 
 ```nginx
 server {
@@ -91,6 +106,10 @@ Before you start mysql container, you need modify mysql root password
 1. Support remote connect
     - If you want to connect MySql container from remote, you can uncomment the code from `nginx.conf`
 
+## Gitea container
+
+Like GitLab but less memory useage. If you want to use the seperate database container, you can use the official docker-compose.yml file.
+
 ## Jenkins container
 
 ```bash
@@ -98,6 +117,15 @@ Before you start mysql container, you need modify mysql root password
 
 chown -R 1000:1000 /home/docker/jenkins/jenkins-data
 
+docker-compose up -d
+```
+
+## Redis container
+
+1. `./data` redis data
+2. `redis.conf` redis config
+
+```bash
 docker-compose up -d
 ```
 

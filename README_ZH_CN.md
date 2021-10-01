@@ -1,37 +1,49 @@
-# About this Repo
+# 关于
+
+这个仓库的初衷是为了学习通过 Docker 建立一个 LNMP 环境，利用 Docker 的跨平台性，换了电脑也可以迅速还原出相同的开发环境，随着日常使用，目前已经支持了很多软件环境，如果有其他的需要欢迎提 PR 或 issue 支持扩展。
+
+已支持的容器：
+
+- Nginx   ✅ 
+- Mysql   ✅ 
+- PHP-FPM ✅ 
+- Gitea   ✅ 
+- Jenkins ✅ 
+- Redis   ✅ 
 
 通过 Docker 容器快速创建 LNMP 环境。
-
-## 支持的应用
-
-- [x] Laravel
-- [x] Wordpress
 
 ## 使用步骤
 
 1. Linux 系统在 home 目录下 `git clone` 该仓库
-2. MacOs 系统由于 Home 目录 Apple 默认不希望用户去使用创建文件，应此在 Document 目录下 `git clone` 该仓库使用 `macos` 分支
+2. MacOS 系统由于 Home 目录 Apple 默认不希望用户去使用创建文件，因此在 Document 目录下 `git clone` 该仓库并使用 `macos` 分支
 3. Mysql 容器需要配置密码
-4. 进入相应的目录使用 `docker-compose -d up` 启动对应的容器
+4. 进入相应的目录使用 `docker-compose up -d` 启动对应的容器
 5. 先启动 php_fpm、MySQL 容器再启动 Nginx
 
-## Docker 安装地址
+## 环境配置
+
+确保已经安装以下环境
+
+### Docker 安装地址
 
 `https://docs.docker.com/install/linux/docker-ce/ubuntu/`
 
-## Docker Compose 安装地址
+### Docker Compose 安装地址
 
 `https://docs.docker.com/compose/install/`
 
-## 创建网络
+### 创建网络
 
 bridge 网络用于 Nginx 和 Mysql php-fpm 相互联通
 
 `docker network create -d bridge nginx_proxy`
 
-## LetsEncrypt 证书安装管理
+### LetsEncrypt 证书安装管理
 
-### 使用 acme.sh 安装管理 letsencrypt https 证书
+如果不需要 `https` 可以忽略。
+
+#### 使用 acme.sh 安装管理 letsencrypt https 证书
 
 1. 设置 DNS 方式验证证书： https://github.com/Neilpang/acme.sh/wiki/dnsapi
 
@@ -61,7 +73,7 @@ acme.sh --issue --dns dns_dp -d assets.noxxxx.com
 
 1. wp-config.php 中 MySQL 主机填写 MySQL 容器名即可
 
-## PHP
+2. Nginx 配置 PHP
 
 ```nginx
 server {
@@ -88,6 +100,9 @@ composer install
 2. 支持远程链接
     - 使用前需要取消 `nginx.conf` 中的注释
 
+## Gitea
+
+GitLab 的替代品，占用内容少，如果想使用单独的 mysql 容器可以参照官方的 docker-compose.yml 配置文件
 
 ## Jenkins 容器
 
@@ -96,6 +111,16 @@ composer install
 chown -R 1000:1000 /home/docker/jenkins/jenkins-data
 
 docker-compose up -d
+```
+
+## Redis 容器
+
+1. 数据持久映射在 `./data` 目录中
+2. Redis 配置文件为 `redis.conf`
+3. 目录底下直接启动容器即可
+
+```bash
+docker-compose up -d --force-recreate
 ```
 
 ## Docker 常用命令
