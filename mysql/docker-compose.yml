@@ -10,6 +10,7 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_USER=${MYSQL_USER}
       - TZ=${TIME_ZONE}
+      # - MYSQL_ROOT_HOST=% if you want remote connect mysql
     volumes:
       - /usr/local/mysql:/var/lib/mysql
     networks:

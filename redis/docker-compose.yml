@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  redis:
+    image: redis:latest
+    container_name: global_redis
+    restart: always
+    volumes:
+      - ./data:/data:rw
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:rw
+    command:
+      /bin/bash -c "redis-server /usr/local/etc/redis/redis.conf "
+    networks:
+      - nginx_proxy
+
+networks:
+  nginx_proxy:
+    external: true
+
