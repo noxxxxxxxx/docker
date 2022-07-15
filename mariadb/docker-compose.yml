@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  db:
+    image: mariadb
+    restart: always
+    container_name: global_mariadb
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_USER=${MARIADB_USER}
+      - TZ=${TIME_ZONE}
+      # - MARIADB_ROOT_HOST=% if you want remote connect mariadb
+    volumes:
+      -  ./mariadb_data:/var/lib/mysql
+    networks:
+      - nginx_proxy
+
+networks:
+  nginx_proxy:
+    external: true
