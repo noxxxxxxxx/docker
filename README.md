@@ -10,6 +10,7 @@ Support：
 
 - Nginx   ✅ 
 - Mysql   ✅ 
+- Mariadb ✅ 
 - PHP-FPM ✅ 
 - Gitea   ✅ 
 - Jenkins ✅ 
