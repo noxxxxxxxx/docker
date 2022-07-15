@@ -8,10 +8,13 @@ services:
         TIMEZONE: ${TIMEZONE}
     image: php:fpm
     container_name: "docker-php"
+    environment:
+      - PHPRC=/usr/local/etc/php/.user.ini
     volumes:
       - ${NGINXASSETS}:/var/www/html
       - ./zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
-      - /phpsock:/var/run
+      - /.user.ini:/usr/local/etc/php/.user.ini
+      - ./phpsock:/var/run
     networks:
       - nginx_proxy
 

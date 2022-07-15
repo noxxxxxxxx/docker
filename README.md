@@ -107,7 +107,11 @@ Before you start mysql container, you need modify mysql root password
 1. Support remote connect
     - If you want to connect MySql container from remote, you can uncomment the code from `nginx.conf`
 
-## jenkins container
+## Gitea container
+
+Like GitLab but less memory useage. If you want to use the seperate database container, you can use the official docker-compose.yml file.
+
+## Jenkins container
 
 ```bash
 # run this command before you start jenkins container
