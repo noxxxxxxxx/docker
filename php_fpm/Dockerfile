@@ -1,16 +1,16 @@
-FROM php:7.4-fpm
-
+FROM php:fpm
 ARG TIMEZONE
 
+RUN apt-get update && apt-get install -y \
+    openssl \
+    git \
+    unzip
+
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-&& composer --version
+#RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+#&& composer --version
 
-# Set timezone
-RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone \
-&& printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini \
-&& "date"
-
+# Change apt
 RUN apt-get clean \
     && cd /var/lib/apt \
     && mv lists lists.old \
@@ -28,3 +28,8 @@ RUN apt-get clean \
     # PHP extension
     && docker-php-ext-install -j$(nproc) pdo_mysql pdo_mysql mysqli \
     && docker-php-ext-enable mysqli
+
+# Set timezone
+RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone \
+&& printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini \
+&& "date"

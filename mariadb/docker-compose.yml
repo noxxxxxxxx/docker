@@ -6,6 +6,8 @@ services:
     image: mariadb
     restart: always
     container_name: global_mariadb
+    # ports:
+    #   - "3306:3306"
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
       - MARIADB_USER=${MARIADB_USER}

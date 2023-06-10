@@ -13,7 +13,7 @@ services:
     volumes:
       - ${NGINXASSETS}:/var/www/html
       - ./zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
-      - /.user.ini:/usr/local/etc/php/.user.ini
+      - ./.user.ini:/usr/local/etc/php/.user.ini
       - ./phpsock:/var/run
     networks:
       - nginx_proxy
