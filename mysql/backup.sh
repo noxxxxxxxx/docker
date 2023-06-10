@@ -1,8 +1,8 @@
 #! /bin/bash
 
-docker exec -i mysql_container_name(global_mysql) bash <<'EOF'
+docker exec -i [mariadb_container_name] bash <<'EOF'
 
-mysqldump -uroot -pyour_password database_name > /home/data/database_name_$(date +%Y%m%d_%H%M%S).sql
+mysqldump -u[user_name] -p[your_password] database_name > /home/data/[database_name_]$(date +%Y%m%d_%H%M%S).sql
 
 exit
 

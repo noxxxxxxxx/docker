@@ -9,7 +9,7 @@ services:
       - "80:80"
       # - "4408:4408" use for nginx proxy mysql connect
       # - "6379:6379" use for nginx proxy redis connect
-      #- "443:443" use for https
+      # - "443:443" use for https
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       #- ./wordpress.conf:/etc/nginx/wordpress.conf:ro
