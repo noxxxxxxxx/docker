@@ -8,6 +8,7 @@ services:
         TIMEZONE: ${TIMEZONE}
     image: php:fpm
     container_name: "docker-php"
+    restart: always
     environment:
       - PHPRC=/usr/local/etc/php/.user.ini
     volumes:
