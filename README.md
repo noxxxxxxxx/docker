@@ -8,14 +8,13 @@ If you want to add new container, feel free to make PR .
 
 Support：
 
-- Nginx   ✅ 
-- Mysql   ✅ 
-- Mariadb ✅ 
-- PHP-FPM ✅ 
-- Gitea   ✅ 
-- Jenkins ✅ 
-- Redis   ✅ 
-
+- Nginx ✅
+- Mysql ✅
+- Mariadb ✅
+- PHP-FPM ✅
+- Gitea ✅
+- Jenkins ✅
+- Redis ✅
 
 [中文文档](https://github.com/noxxxxxxxx/docker/blob/master/README_ZH_CN.md)
 
@@ -73,11 +72,11 @@ vim config.inc.php
 ```
 
 3. if nginx container is running, visit `http://ip/phpmyadmin`
-4. server address is mysql container name `global_mysql`，which you can modify in `mysql/docker-compose.yml`
+4. server address is mysql container name `mysql`，which you can modify in `mysql/docker-compose.yml`
 
 ## WordPress
 
-1. `DB_HOST` in `wp-config.php` is mysql container name `global_mysql`
+1. `DB_HOST` in `wp-config.php` is mysql container name `mysql`
 
 ### Nginx PHP config
 
@@ -105,7 +104,7 @@ composer install
 Before you start mysql container, you need modify mysql root password
 
 1. Support remote connect
-    - If you want to connect MySql container from remote, you can uncomment the code from `nginx.conf`
+   - If you want to connect MySql container from remote, you can uncomment the code from `nginx.conf`
 
 ## Gitea container
 
@@ -118,7 +117,7 @@ Like GitLab but less memory useage. If you want to use the seperate database con
 
 chown -R 1000:1000 /home/docker/jenkins/jenkins-data
 
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Redis container
@@ -127,12 +126,8 @@ docker-compose up -d
 2. `redis.conf` redis config
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
-
-## Donation
-
-<img width="150" src="http://img.noxxxx.com/alipay.png" alt="donation">
 
 ## LICENSE
 
