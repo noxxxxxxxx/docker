@@ -1,11 +1,10 @@
-version: '3'
+version: "3"
 
 services:
-
   db:
     image: mysql:5.5
     restart: always
-    container_name: global_mysql
+    container_name: mysql
     # ports:
     #   - "3306:3306"
     environment:
@@ -14,7 +13,7 @@ services:
       - TZ=${TIME_ZONE}
       # - MYSQL_ROOT_HOST=% if you want remote connect mysql
     volumes:
-      -  ./mysql_data:/var/lib/mysql
+      - ./mysql_data:/var/lib/mysql
     networks:
       - nginx_proxy
 

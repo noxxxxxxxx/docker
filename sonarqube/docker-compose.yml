@@ -3,25 +3,26 @@ version: "3"
 services:
   sonarqube:
     image: sonarqube
+    container_name: sonarqube
     ports:
-        - "9000:9000"
+      - "9000:9000"
     environment:
-        TZ: ${TIMEZONE}
-        SONARQUBE_JDBC_USERNAME: ${USERNAME}
-        SONARQUBE_JDBC_PASSWORD: ${PASSWORD}
-        SONARQUBE_JDBC_URL: jdbc:${DB}
+      TZ: ${TIMEZONE}
+      SONARQUBE_JDBC_USERNAME: ${USERNAME}
+      SONARQUBE_JDBC_PASSWORD: ${PASSWORD}
+      SONARQUBE_JDBC_URL: jdbc:${DB}
     volumes:
-        - sonarqube_conf:/opt/sonarqube/conf
-        - sonarqube_data:/opt/sonarqube/data
-        - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
     networks:
-        - nginx_proxy
+      - nginx_proxy
 
 networks:
-    nginx_proxy:
-        external: true
+  nginx_proxy:
+    external: true
 
 volumes:
-    sonarqube_conf:
-    sonarqube_data:
-    sonarqube_extensions:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
