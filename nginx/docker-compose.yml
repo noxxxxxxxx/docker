@@ -21,7 +21,7 @@ services:
       - ./html:/usr/share/nginx/html
       #- /phpsock:/tmp
       #- /root/.acme.sh:/root/.acme.sh
-    environment: 
+    environment:
       TZ: ${TIME_ZONE}
     networks:
       - nginx_proxy
@@ -29,4 +29,3 @@ services:
 networks:
   nginx_proxy:
     external: true
-

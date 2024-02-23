@@ -1,11 +1,10 @@
-version: '3'
+version: "3"
 
 services:
-
   db:
     image: mysql:5.5
     restart: always
-    container_name: global_mysql
+    container_name: mysql
     # ports:
     #   - "3306:3306"
     environment:
