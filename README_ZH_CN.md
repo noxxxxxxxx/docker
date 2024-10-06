@@ -13,6 +13,7 @@
 - Gitea ✅
 - Jenkins ✅
 - Redis ✅
+- Glances ✅
 
 通过 Docker 容器快速创建 LNMP 环境。
 
@@ -92,6 +93,8 @@ server {
 }
 ```
 
+3. `chown -R www-data:www-data /home/docker/nginx/html/your_wordpress_site_file`
+
 ## PHP Composer 使用
 
 进入容器，执行 composer 命令
@@ -134,6 +137,13 @@ docker compose up -d
 ```bash
 docker compose up -d
 ```
+
+## Glances
+
+1. 使用前请更新 `glances.conf` 文件，确保是最新版本的配置
+2. `docker compose build` 构建镜像，这样可以使用自己的配置
+3. `docker compose up -d` 启动
+4. 打开浏览器访问 ip::61208，当然也可以在命令行访问
 
 ## Docker 常用命令
 

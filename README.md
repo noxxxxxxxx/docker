@@ -15,6 +15,7 @@ Support：
 - Gitea ✅
 - Jenkins ✅
 - Redis ✅
+- Glances ✅
 
 [中文文档](https://github.com/noxxxxxxxx/docker/blob/master/README_ZH_CN.md)
 
@@ -77,6 +78,16 @@ vim config.inc.php
 ## WordPress
 
 1. `DB_HOST` in `wp-config.php` is mysql container name `mysql`
+2. Config your site.conf
+
+```nginx
+server {
+    set $custom_path "/var/www/html/${folder_name in nginx/html}";
+    listen 80;
+}
+```
+
+3. `chown -R www-data:www-data /home/docker/nginx/html/your_wordpress_site_file`
 
 ### Nginx PHP config
 
@@ -128,6 +139,13 @@ docker compose up -d
 ```bash
 docker compose up -d
 ```
+
+## Glances
+
+1. Update `glances.conf` file before you get ready to use the latest version of Glances
+2. Use `docker compose build`，so you can customize the configuration
+3. `docker compose up -d`
+4. Open your browser and visit ip::61208
 
 ## LICENSE
 
