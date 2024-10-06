@@ -1,10 +1,12 @@
 # About this Repo
 
-You can use this repo to build your LNMP quickly by using docker.
+You can use this repository to quickly build your `LNMP` stack using Docker.
 
-For now many softwares have been uesd in docker container.
+Currently, many software applications are being utilized within Docker containers.
 
-If you want to add new container, feel free to make PR .
+All container configurations in this repository are written in accordance with the official documentation. Users can modify the configurations according to their actual needs. There are no customized scripts, so they can also be used as demos for reference and learning.
+
+If you want to add new container, feel free to make PR.
 
 Support：
 
