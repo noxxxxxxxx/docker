@@ -1,8 +1,10 @@
 # About this Repo
 
-You can use this repo to build your LNMP quickly by using docker.
+You can use this repository to quickly build your LNMP stack using Docker.
 
-For now many softwares have been uesd in docker container.
+Currently, many software applications are being utilized within Docker containers.
+
+All container configurations in this repository are written in accordance with the official documentation. Users can modify the configurations according to their actual needs. There are no customized scripts, so they can also be used as demos for reference and learning.
 
 If you want to add new container, feel free to make PR .
 
@@ -15,6 +17,7 @@ Support：
 - Gitea ✅
 - Jenkins ✅
 - Redis ✅
+- Glances ✅
 
 [中文文档](https://github.com/noxxxxxxxx/docker/blob/master/README_ZH_CN.md)
 
@@ -76,7 +79,17 @@ vim config.inc.php
 
 ## WordPress
 
-1. `DB_HOST` in `wp-config.php` is mysql container name `global_mysql`
+1. `DB_HOST` in `wp-config.php` is mysql container name `mysql`
+2. Config your site.conf
+
+```nginx
+server {
+    set $custom_path "/var/www/html/${folder_name in nginx/html}";
+    listen 80;
+}
+```
+
+3. `chown -R www-data:www-data /home/docker/nginx/html/your_wordpress_site_file`
 
 ### Nginx PHP config
 
@@ -128,6 +141,13 @@ docker compose up -d
 ```bash
 docker compose up -d
 ```
+
+## Glances
+
+1. Update `glances.conf` file before you get ready to use the latest version of Glances
+2. Use `docker compose build`，so you can customize the configuration
+3. `docker compose up -d`
+4. Open your browser and visit ip::61208
 
 ## LICENSE
 
