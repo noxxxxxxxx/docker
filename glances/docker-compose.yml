@@ -3,7 +3,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
     environment:
       - TZ=${TIME_ZONE}
       - "GLANCES_OPT=-C /glances/conf/glances.conf -w"
