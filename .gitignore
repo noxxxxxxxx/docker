@@ -1,3 +1,7 @@
-nginx/conf.d/customer
-.DS_Store
 .idea/
+.DS_Store
+
+# sonarqube
+
+sonarqube/sonarqube_data
+sonarqube/sonarqube_logs

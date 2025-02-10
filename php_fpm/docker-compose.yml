@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   php:
     build:
@@ -8,7 +6,7 @@ services:
         TIMEZONE: ${TIMEZONE}
     image: php:fpm
     container_name: php_fpm
-    restart: always
+    restart: unless-stopped
     environment:
       - PHPRC=/usr/local/etc/php/.user.ini
     volumes:

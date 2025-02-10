@@ -1,10 +1,8 @@
-version: "3"
-
 services:
   nginx-proxy:
     image: nginx
     container_name: nginx-proxy
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       # - "4408:4408" use for nginx proxy mysql connect
@@ -29,4 +27,3 @@ services:
 networks:
   nginx_proxy:
     external: true
-
