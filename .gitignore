@@ -7,3 +7,12 @@ sonarqube/sonarqube_logs
 
 #mariadb
 mariadb/mariadb_data
+
+# gitea
+gitea/data/
+
+# redis
+redis/data/
+
+# nginx
+nginx/html/default/p/
