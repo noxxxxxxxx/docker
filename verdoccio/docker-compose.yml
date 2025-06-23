@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  verdaccio:
+    image: verdaccio/verdaccio:latest
+    ports:
+      - "4873:4873"
+    volumes:
+      - ./config/config.yaml:/verdaccio/conf/config.yaml
+      - ./storage:/verdaccio/storage
+      - ./htpasswd:/verdaccio/htpasswd
+    environment:
+      - VERDACCIO_LOG_LEVEL=http
+      - VERDACCIO_PORT=4873
+    networks:
+      - nginx_proxy
+
+networks:
+  nginx_proxy:
+    external: true

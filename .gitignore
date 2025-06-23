@@ -2,6 +2,8 @@
 .DS_Store
 
 # sonarqube
-
 sonarqube/sonarqube_data
 sonarqube/sonarqube_logs
+
+#mariadb
+mariadb/mariadb_data
