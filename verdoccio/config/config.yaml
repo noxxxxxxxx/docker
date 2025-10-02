@@ -1,7 +1,7 @@
-storage: ./storage
+storage: /verdaccio/storage
 auth:
   htpasswd:
-    file: ./htpasswd
+    file: /verdaccio/htpasswd
     max_users: 1
 uplinks:
   npmjs:
