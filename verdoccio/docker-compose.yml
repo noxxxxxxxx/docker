@@ -1,17 +1,16 @@
-version: '3.8'
-
 services:
   verdaccio:
     image: verdaccio/verdaccio:latest
-    ports:
-      - "4873:4873"
     volumes:
       - ./config/config.yaml:/verdaccio/conf/config.yaml
       - ./storage:/verdaccio/storage
-      - ./htpasswd:/verdaccio/htpasswd
+      - ./htpasswd:/verdaccio/conf/htpasswd
     environment:
       - VERDACCIO_LOG_LEVEL=http
       - VERDACCIO_PORT=4873
+      - VERDACCIO_PUBLIC_URL=https://npm.noxxxx.com
+      - VERDACCIO_USER_ID=10001
+    user: "10001:65533"
     networks:
       - nginx_proxy
 

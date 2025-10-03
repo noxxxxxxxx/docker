@@ -1,17 +1,14 @@
 storage: /verdaccio/storage
 auth:
   htpasswd:
-    file: /verdaccio/htpasswd
+    file: /verdaccio/conf/htpasswd
+    algorithm: bcrypt 
     max_users: 1
 uplinks:
   npmjs:
     url: https://registry.npmjs.org/
 packages:
-  '@*/*':
-    access: $authenticated
-    publish: $authenticated
-    unpublish: $authenticated
-  '*':
+  '**':
     access: $all
     publish: $authenticated
     unpublish: $authenticated
