@@ -49,6 +49,3 @@ networks:
   nginx_proxy:
     external: true
 
-
-# local scan command
-# docker run --rm -it -v "$(pwd):/src" -w /usr/src sonarsource/sonar-scanner-cli:latest -Dsonar.host.url=https://sonarqube.domain.com -Dsonar.login=token
