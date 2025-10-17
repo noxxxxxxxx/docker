@@ -18,7 +18,28 @@ services:
     restart: unless-stopped
     networks:
       - nginx_proxy
+      - gitea_internal
+
+  gitea-runner:
+    image: gitea/act_runner:latest
+    container_name: gitea-runner
+    restart: always
+    environment:
+      - GITEA_INSTANCE_URL=http://gitea:3000           # 修改为你的 Gitea 服务地址
+      - GITEA_RUNNER_REGISTRATION_TOKEN=${RUNNER_TOKEN}    # 替换为你的注册 token
+      - GITEA_RUNNER_NAME=runner-1
+      - GITEA_RUNNER_LABELS=linux,x64,docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./runner-data:/data
+    depends_on:
+      - gitea
+    networks:
+      - nginx_proxy
+      - gitea_internal
 
 networks:
   nginx_proxy:
     external: true
+  gitea_internal:
+    internal: true
