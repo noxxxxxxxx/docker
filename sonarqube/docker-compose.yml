@@ -19,7 +19,7 @@ services:
       retries: 3
 
   sonarqube:
-    image: sonarqube:lts-community
+    image: sonarqube:community
     container_name: sonarqube
     restart: unless-stopped
     depends_on:
@@ -48,3 +48,7 @@ services:
 networks:
   nginx_proxy:
     external: true
+
+
+# local scan command
+# docker run --rm -it -v "$(pwd):/src" -w /usr/src sonarsource/sonar-scanner-cli:latest -Dsonar.host.url=https://sonarqube.domain.com -Dsonar.login=token
