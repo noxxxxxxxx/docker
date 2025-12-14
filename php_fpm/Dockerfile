@@ -16,12 +16,14 @@ RUN apt-get clean \
     && mv lists lists.old \
     && mkdir -p lists/partial \
     && apt-get clean \
-    && echo "deb http://mirrors.aliyun.com/debian/ buster main non-free contrib \n
-    deb-src http://mirrors.aliyun.com/debian/ buster main non-free contrib \n
-    deb http://mirrors.aliyun.com/debian-security buster/updates main \n
-    deb-src http://mirrors.aliyun.com/debian-security buster/updates main \n
-    deb http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib \n
-    deb-src http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib" > /etc/apt/sources.list \
+    && cat > /etc/apt/sources.list << EOF
+deb http://mirrors.aliyun.com/debian/ buster main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ buster main non-free contrib
+deb http://mirrors.aliyun.com/debian-security buster/updates main
+deb-src http://mirrors.aliyun.com/debian-security buster/updates main
+deb http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib
+EOF
     && apt-get update \
     && docker-php-ext-install -j$(nproc) pdo_mysql mysqli \
     && docker-php-ext-enable mysqli
