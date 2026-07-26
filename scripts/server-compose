@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Server-only launcher.  The repository remains declarative; mutable state and
+# secrets are read from /home/data and never need to be committed.
+service=${1:?usage: server-compose <service> <docker-compose arguments...>}
+shift
+
+repo_root=${REPO_ROOT:-/home/docker}
+data_root=${DATA_ROOT:-/home/data}
+compose_file="$repo_root/$service/docker-compose.yml"
+override_file="$data_root/config/compose-overrides/$service.yml"
+env_file="$data_root/secrets/$service.env"
+
+args=(--project-directory "$repo_root/$service" -f "$compose_file")
+if [[ -f "$override_file" ]]; then
+  args+=(-f "$override_file")
+fi
+if [[ -f "$env_file" ]]; then
+  args=(--env-file "$env_file" "${args[@]}")
+fi
+
+exec docker compose "${args[@]}" "$@"

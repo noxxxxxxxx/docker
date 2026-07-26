@@ -33,7 +33,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./runner-data:/data
     depends_on:
-      - gitea
+      - web
     networks:
       - nginx_proxy
       - gitea_internal

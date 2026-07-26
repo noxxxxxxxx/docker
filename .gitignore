@@ -1,6 +1,15 @@
 .idea/
 .DS_Store
 
+# Server-local runtime state and private configuration. Keep templates in Git,
+# but never add the real files and data directories from a deployment host.
+*.log
+*.log.*
+.env
+.env.*
+!.env.example
+sunshine/
+
 # sonarqube
 sonarqube/sonarqube_data
 sonarqube/sonarqube_logs
@@ -16,3 +25,14 @@ redis/data/
 
 # nginx
 nginx/html/default/p/
+nginx/conf.d/*.conf
+!nginx/conf.d/*.conf.bak
+nginx/html/*/
+!nginx/html/default/
+
+# Other service state
+qinglong/data/
+gitea/runner-data/
+verdoccio/storage/
+file_browser/data/
+file_browser/filebrowser.db
