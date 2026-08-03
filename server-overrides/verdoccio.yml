@@ -1,6 +1,6 @@
 services:
   verdaccio:
     volumes:
-      - /home/docker/verdoccio/config/config.yaml:/verdaccio/conf/config.yaml
-      - /home/data/runtime/verdoccio/storage:/verdaccio/storage
-      - /home/data/secrets/verdoccio.htpasswd:/verdaccio/conf/htpasswd
+      - ${REPO_ROOT}/verdoccio/config/config.yaml:/verdaccio/conf/config.yaml
+      - ${DATA_ROOT}/runtime/verdoccio/storage:/verdaccio/storage
+      - ${DATA_ROOT}/secrets/verdoccio.htpasswd:/verdaccio/conf/htpasswd

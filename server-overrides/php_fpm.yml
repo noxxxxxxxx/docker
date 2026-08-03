@@ -2,7 +2,7 @@ services:
   php:
     restart: always
     volumes:
-      - /home/data/runtime/nginx/html:/var/www/html
-      - /home/data/config/php_fpm/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
-      - /home/data/config/php_fpm/.user.ini:/usr/local/etc/php/.user.ini
+      - ${DATA_ROOT}/runtime/nginx/html:/var/www/html
+      - ${DATA_ROOT}/config/php_fpm/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - ${DATA_ROOT}/config/php_fpm/.user.ini:/usr/local/etc/php/.user.ini
       - /phpsock:/var/run

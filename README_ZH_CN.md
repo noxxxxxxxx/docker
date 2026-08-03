@@ -93,7 +93,7 @@ server {
 }
 ```
 
-3. `chown -R www-data:www-data /home/docker/nginx/html/your_wordpress_site_file`
+3. `chown -R www-data:www-data /path/to/repository/nginx/html/your_wordpress_site_file`
 
 ## PHP Composer 使用
 
@@ -123,7 +123,7 @@ GitLab 的替代品，使用 Go 编写，占用内容少，如果想使用单独
 
 ```bash
 # 设置权限，否则无法运行
-chown -R 1000:1000 /home/docker/jenkins/jenkins-data
+chown -R 1000:1000 /path/to/jenkins-data
 
 docker compose up -d
 ```

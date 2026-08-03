@@ -89,7 +89,7 @@ server {
 }
 ```
 
-3. `chown -R www-data:www-data /home/docker/nginx/html/your_wordpress_site_file`
+3. `chown -R www-data:www-data /path/to/repository/nginx/html/your_wordpress_site_file`
 
 ### Nginx PHP config
 
@@ -128,7 +128,7 @@ Like GitLab but less memory useage. If you want to use the seperate database con
 ```bash
 # run this command before you start jenkins container
 
-chown -R 1000:1000 /home/docker/jenkins/jenkins-data
+chown -R 1000:1000 /path/to/jenkins-data
 
 docker compose up -d
 ```

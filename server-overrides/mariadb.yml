@@ -1,4 +1,4 @@
 services:
   db:
     volumes:
-      - /home/data/runtime/mariadb/data:/var/lib/mysql
+      - ${DATA_ROOT}/runtime/mariadb/data:/var/lib/mysql
