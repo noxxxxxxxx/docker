@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+# Create a consistent encrypted backup of a deployment repository and its
+# private data root, then upload it to Qiniu.  All deployment-specific values
+# are loaded from a private environment file outside this repository.
+set -Eeuo pipefail
+umask 077
+
+config_file=${BACKUP_CONFIG_FILE:?Set BACKUP_CONFIG_FILE to a private configuration file}
+if [[ ! -r "$config_file" ]]; then
+  echo "Backup configuration is not readable: $config_file" >&2
+  exit 1
+fi
+
+# The configuration file is root-owned and mode 0600. It is deliberately not
+# stored in Git because it contains deployment paths and storage identifiers.
+set -a
+# shellcheck disable=SC1090
+source "$config_file"
+set +a
+
+require_var() {
+  local name=$1
+  if [[ -z ${!name:-} ]]; then
+    echo "Missing required configuration: $name" >&2
+    exit 1
+  fi
+}
+
+for name in REPO_ROOT DATA_ROOT QSHELL_BIN QINIU_BUCKET GPG_PASSPHRASE_FILE; do
+  require_var "$name"
+done
+
+if [[ ! -x "$QSHELL_BIN" || ! -r "$GPG_PASSPHRASE_FILE" ]]; then
+  echo "Qshell binary or GPG passphrase file is unavailable" >&2
+  exit 1
+fi
+
+backup_prefix=${BACKUP_PREFIX:-server}
+backup_work_dir=${BACKUP_WORK_DIR:-"$DATA_ROOT/backups/staging"}
+stop_timeout=${STOP_TIMEOUT_SECONDS:-120}
+timestamp=$(date -u +%Y%m%d-%H%M%S)
+object_key="${backup_prefix}-consistent-${timestamp}.tar.gz.gpg"
+archive_path="$backup_work_dir/$object_key"
+manifest_path="$archive_path.sha256"
+
+mkdir -p "$backup_work_dir"
+
+declare -a stopped_containers=()
+cleanup() {
+  local status=$?
+  if ((${#stopped_containers[@]})); then
+    docker start "${stopped_containers[@]}" >/dev/null || {
+      echo "Failed to restart one or more containers: ${stopped_containers[*]}" >&2
+      status=1
+    }
+  fi
+  rm -f "$archive_path" "$manifest_path"
+  exit "$status"
+}
+trap cleanup EXIT
+
+read -r -a containers <<< "${BACKUP_CONTAINERS:-}"
+for container in "${containers[@]}"; do
+  if [[ $(docker inspect --format '{{.State.Running}}' "$container" 2>/dev/null || true) == true ]]; then
+    docker stop --time "$stop_timeout" "$container" >/dev/null
+    stopped_containers+=("$container")
+  fi
+done
+
+repo_parent=$(dirname "$REPO_ROOT")
+repo_name=$(basename "$REPO_ROOT")
+data_parent=$(dirname "$DATA_ROOT")
+data_name=$(basename "$DATA_ROOT")
+
+tar --create --gzip --file - --numeric-owner \
+  --exclude="${data_name}/backups" \
+  -C "$repo_parent" "$repo_name" \
+  -C "$data_parent" "$data_name" \
+  | gpg --batch --yes --pinentry-mode loopback \
+      --passphrase-file "$GPG_PASSPHRASE_FILE" \
+      --symmetric --cipher-algo AES256 --output "$archive_path"
+
+# Validate both the encryption layer and the compressed tar stream locally.
+gpg --batch --yes --pinentry-mode loopback \
+  --passphrase-file "$GPG_PASSPHRASE_FILE" --decrypt --output - "$archive_path" \
+  | gzip --test
+
+local_size=$(stat --format=%s "$archive_path")
+local_sha256=$(sha256sum "$archive_path" | awk '{print $1}')
+printf '%s  %s\n' "$local_sha256" "$object_key" > "$manifest_path"
+
+"$QSHELL_BIN" rput --overwrite "$QINIU_BUCKET" "$object_key" "$archive_path"
+
+remote_size=$("$QSHELL_BIN" stat "$QINIU_BUCKET" "$object_key" \
+  | sed -nE 's/.*"fsize"[[:space:]]*:[[:space:]]*([0-9]+).*/\1/p' \
+  | head -n 1)
+if [[ "$remote_size" != "$local_size" ]]; then
+  echo "Remote size verification failed: local=$local_size remote=${remote_size:-missing}" >&2
+  exit 1
+fi
+
+"$QSHELL_BIN" rput --overwrite "$QINIU_BUCKET" "${object_key}.sha256" "$manifest_path"
+echo "Backup uploaded and verified: $object_key ($local_size bytes)"

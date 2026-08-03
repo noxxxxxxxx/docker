@@ -21,6 +21,11 @@ Support：
 
 [中文文档](https://github.com/noxxxxxxxx/docker/blob/master/README_ZH_CN.md)
 
+## Server backup and restore
+
+For deployments that keep mutable data outside the repository, see the
+[backup guide](docs/SERVER_BACKUP.md) and [restore guide](docs/SERVER_RESTORE.md).
+
 ## LNMP Usage
 
 ### Linux

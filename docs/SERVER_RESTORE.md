@@ -1,15 +1,21 @@
-# 服务器恢复说明
+# Server Restore Guide
 
-本仓库只保存可公开的 Compose 定义。运行数据、证书、服务配置与凭据必须保存在仓库之外，并通过加密备份恢复。
+This repository contains only public Compose definitions. Runtime data,
+certificates, service configuration, and credentials must remain outside Git
+and be restored from an encrypted backup.
 
-恢复时在服务器私有环境中设置以下变量：
+In the private deployment environment, set the following values before using
+the server launcher:
 
 ```bash
 export REPO_ROOT=/path/to/repository
 export DATA_ROOT=/path/to/private-data
 ```
 
-`DATA_ROOT` 应包含 `runtime`、`config`、`secrets`、`certificates` 和 `backups` 子目录。先恢复并校验加密备份，再按依赖顺序启动数据库、缓存、应用服务与反向代理：
+`DATA_ROOT` must contain the `runtime`, `config`, `secrets`, `certificates`,
+and `backups` directories. Download the matching encrypted backup, verify its
+SHA-256 sidecar file, decrypt it, and restore both the repository and data
+root. Then start services in dependency order:
 
 ```bash
 ./scripts/server-compose mariadb up -d
@@ -21,4 +27,6 @@ export DATA_ROOT=/path/to/private-data
 ./scripts/server-compose nginx up -d
 ```
 
-不要提交实际路径、主机地址、证书、`.env`、数据库数据、上传文件或备份归档。
+Do not commit deployment paths, host addresses, certificates, `.env` files,
+database data, user uploads, or backup archives. See
+[the backup guide](SERVER_BACKUP.md) for the backup process.
