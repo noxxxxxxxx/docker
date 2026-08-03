@@ -5,8 +5,8 @@
 Use `scripts/server-backup` for an encrypted, consistent backup of the public
 repository and its private data root. It stops only the configured containers
 that write into the data root, creates a gzip tar stream, encrypts it with GPG
-before it reaches disk, verifies the encrypted archive locally, uploads it to
-Qiniu, and confirms the remote object size before restarting the containers.
+before it reaches disk, verifies the encrypted archive locally, restarts the
+containers, uploads it to Qiniu, and confirms the remote object size.
 
 ## Private configuration
 
@@ -20,8 +20,10 @@ chmod 600 /path/to/gpg-passphrase
 ```
 
 The private configuration defines the repository root, private data root,
-Qiniu client and bucket, passphrase file, and the complete list of containers
-that write to the data root. It must never be committed.
+Qiniu client and bucket, passphrase file, and the complete stop/start lists of
+containers that write to the data root. Put the reverse proxy last in both
+lists; start databases and other upstream services before applications. It
+must never be committed.
 
 ## Run and schedule
 
