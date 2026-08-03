@@ -1,0 +1,5 @@
+services:
+  redis:
+    volumes:
+      - ${DATA_ROOT}/runtime/redis/data:/data:rw
+      - ${DATA_ROOT}/config/redis/redis.conf:/usr/local/etc/redis/redis.conf:rw

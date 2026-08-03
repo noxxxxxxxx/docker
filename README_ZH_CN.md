@@ -17,6 +17,11 @@
 
 通过 Docker 容器快速创建 LNMP 环境。
 
+## 服务器备份与恢复
+
+对于将可变数据存放在仓库外的部署，请阅读[服务器备份说明](docs/SERVER_BACKUP_ZH_CN.md)
+和[服务器恢复说明](docs/SERVER_RESTORE_ZH_CN.md)。
+
 ## 使用步骤
 
 1. Linux 系统在 home 目录下 `git clone` 该仓库
@@ -93,7 +98,7 @@ server {
 }
 ```
 
-3. `chown -R www-data:www-data /home/docker/nginx/html/your_wordpress_site_file`
+3. `chown -R www-data:www-data /path/to/repository/nginx/html/your_wordpress_site_file`
 
 ## PHP Composer 使用
 
@@ -123,7 +128,7 @@ GitLab 的替代品，使用 Go 编写，占用内容少，如果想使用单独
 
 ```bash
 # 设置权限，否则无法运行
-chown -R 1000:1000 /home/docker/jenkins/jenkins-data
+chown -R 1000:1000 /path/to/jenkins-data
 
 docker compose up -d
 ```

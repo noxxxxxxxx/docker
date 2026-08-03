@@ -1,0 +1,6 @@
+services:
+  verdaccio:
+    volumes:
+      - ${REPO_ROOT}/verdoccio/config/config.yaml:/verdaccio/conf/config.yaml
+      - ${DATA_ROOT}/runtime/verdoccio/storage:/verdaccio/storage
+      - ${DATA_ROOT}/secrets/verdoccio.htpasswd:/verdaccio/conf/htpasswd

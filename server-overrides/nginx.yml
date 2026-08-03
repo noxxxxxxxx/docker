@@ -1,0 +1,10 @@
+services:
+  nginx-proxy:
+    restart: always
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ${DATA_ROOT}/config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ${DATA_ROOT}/config/nginx/conf.d:/etc/nginx/conf.d
+      - ${DATA_ROOT}/runtime/nginx/log:/var/log/nginx
+      - ${DATA_ROOT}/runtime/nginx/html:/usr/share/nginx/html
+      - ${DATA_ROOT}/certificates/acme.sh:/root/.acme.sh:ro

@@ -6,7 +6,7 @@ services:
     container_name: jenkins
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /home/docker/jenkins/jenkins-data:/var/jenkins_home
+      - ${JENKINS_DATA_DIR:?JENKINS_DATA_DIR must be set}:/var/jenkins_home
     expose:
       - 8080
       - 50000

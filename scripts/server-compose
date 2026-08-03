@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Server-only launcher. Set REPO_ROOT and DATA_ROOT in the private deployment
+# environment; mutable state and secrets are never committed to this repository.
+service=${1:?usage: server-compose <service> <docker-compose arguments...>}
+shift
+
+repo_root=${REPO_ROOT:?REPO_ROOT must be set in the private deployment environment}
+data_root=${DATA_ROOT:?DATA_ROOT must be set in the private deployment environment}
+compose_file="$repo_root/$service/docker-compose.yml"
+override_file="$data_root/config/compose-overrides/$service.yml"
+env_file="$data_root/secrets/$service.env"
+
+args=(--project-directory "$repo_root/$service" -f "$compose_file")
+if [[ -f "$override_file" ]]; then
+  args+=(-f "$override_file")
+fi
+if [[ -f "$env_file" ]]; then
+  args=(--env-file "$env_file" "${args[@]}")
+fi
+
+exec docker compose "${args[@]}" "$@"

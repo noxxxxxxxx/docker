@@ -1,0 +1,8 @@
+services:
+  php:
+    restart: always
+    volumes:
+      - ${DATA_ROOT}/runtime/nginx/html:/var/www/html
+      - ${DATA_ROOT}/config/php_fpm/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - ${DATA_ROOT}/config/php_fpm/.user.ini:/usr/local/etc/php/.user.ini
+      - /phpsock:/var/run

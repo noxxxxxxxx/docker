@@ -1,0 +1,13 @@
+services:
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: ${SONAR_POSTGRES_PASSWORD}
+    volumes:
+      - ${DATA_ROOT}/runtime/sonarqube/postgres:/var/lib/postgresql/data
+  sonarqube:
+    environment:
+      SONAR_JDBC_PASSWORD: ${SONAR_POSTGRES_PASSWORD}
+    volumes:
+      - ${DATA_ROOT}/runtime/sonarqube/data:/opt/sonarqube/data
+      - ${DATA_ROOT}/runtime/sonarqube/logs:/opt/sonarqube/logs
+      - ${DATA_ROOT}/runtime/sonarqube/extensions:/opt/sonarqube/extensions
