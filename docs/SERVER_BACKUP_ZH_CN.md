@@ -30,7 +30,7 @@ BACKUP_CONFIG_FILE=/path/to/private-backup.env ./scripts/server-backup
 
 确认手动执行成功后，再由服务器定时任务执行相同命令。每次会上传两个对象：加密的
 `.tar.gz.gpg` 归档和对应的 `.sha256` 校验文件。脚本不会自动删除远端备份；请在七牛
-Bucket 中配置经过复核的生命周期策略管理保留时间。
+Bucket 中配置经过复核的生命周期策略管理保留时间。脚本通过锁防止并发执行多个备份。
 
 ## 恢复
 

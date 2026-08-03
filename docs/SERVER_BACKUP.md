@@ -37,6 +37,7 @@ Schedule the same command with the server's scheduler only after the manual
 run has succeeded. The script uploads two objects: an encrypted
 `.tar.gz.gpg` archive and its `.sha256` sidecar file. It intentionally does
 not delete remote backups; use a reviewed Qiniu lifecycle policy for retention.
+Only one backup can run at a time; a lock prevents concurrent snapshots.
 
 ## Recovery
 
