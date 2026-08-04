@@ -52,6 +52,8 @@ if ! flock -n 9; then
 fi
 
 declare -a stopped_containers=()
+archive_validated=false
+backup_completed=false
 restart_stopped_containers() {
   local container
   local -a start_containers=()
@@ -88,7 +90,13 @@ cleanup() {
     echo "Failed to restart one or more containers" >&2
     status=1
   fi
-  rm -f "$archive_path" "$manifest_path"
+  if [[ $backup_completed == true ]]; then
+    rm -f "$archive_path" "$manifest_path"
+  elif [[ $archive_validated == true ]]; then
+    echo "Backup did not complete; retaining validated artifacts: $archive_path and $manifest_path" >&2
+  else
+    rm -f "$archive_path" "$manifest_path"
+  fi
   exit "$status"
 }
 trap cleanup EXIT
@@ -120,6 +128,7 @@ echo "Validating encrypted archive"
 gpg --batch --yes --pinentry-mode loopback \
   --passphrase-file "$GPG_PASSPHRASE_FILE" --decrypt --output - "$archive_path" \
   | gzip --test
+archive_validated=true
 
 # The filesystem snapshot is now complete. Restore service before the
 # potentially long remote upload, while preserving the validated archive.
@@ -133,7 +142,9 @@ echo "Uploading encrypted archive to Qiniu"
 "$QSHELL_BIN" rput --overwrite "$QINIU_BUCKET" "$object_key" "$archive_path"
 
 remote_size=$("$QSHELL_BIN" stat "$QINIU_BUCKET" "$object_key" \
-  | sed -nE 's/.*"fsize"[[:space:]]*:[[:space:]]*([0-9]+).*/\1/p' \
+  | sed -nE \
+      -e 's/.*"fsize"[[:space:]]*:[[:space:]]*([0-9]+).*/\1/p' \
+      -e 's/^[[:space:]]*[Ff][Ss]ize:[[:space:]]*([0-9]+).*/\1/p' \
   | head -n 1)
 if [[ "$remote_size" != "$local_size" ]]; then
   echo "Remote size verification failed: local=$local_size remote=${remote_size:-missing}" >&2
@@ -142,4 +153,5 @@ fi
 
 echo "Uploading checksum sidecar to Qiniu"
 "$QSHELL_BIN" rput --overwrite "$QINIU_BUCKET" "${object_key}.sha256" "$manifest_path"
+backup_completed=true
 echo "Backup uploaded and verified: $object_key ($local_size bytes)"

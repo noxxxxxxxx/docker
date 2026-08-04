@@ -38,6 +38,10 @@ run has succeeded. The script uploads two objects: an encrypted
 `.tar.gz.gpg` archive and its `.sha256` sidecar file. It intentionally does
 not delete remote backups; use a reviewed Qiniu lifecycle policy for retention.
 Only one backup can run at a time; a lock prevents concurrent snapshots.
+If a failure happens after local validation but before the full remote upload
+has completed, the validated local archive and checksum are retained in the
+staging directory for diagnosis or a deliberate retry; remove them only after
+checking the failure.
 
 ## Recovery
 
