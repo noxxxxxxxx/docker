@@ -37,24 +37,66 @@ fi
 
 backup_prefix=${BACKUP_PREFIX:-server}
 backup_work_dir=${BACKUP_WORK_DIR:-"$DATA_ROOT/backups/staging"}
-stop_timeout=${STOP_TIMEOUT_SECONDS:-120}
+stop_timeout=${STOP_TIMEOUT_SECONDS:-30}
 timestamp=$(date -u +%Y%m%d-%H%M%S)
 object_key="${backup_prefix}-consistent-${timestamp}.tar.gz.gpg"
 archive_path="$backup_work_dir/$object_key"
 manifest_path="$archive_path.sha256"
 
 mkdir -p "$backup_work_dir"
+lock_file=${BACKUP_LOCK_FILE:-"$DATA_ROOT/backups/server-backup.lock"}
+exec 9>"$lock_file"
+if ! flock -n 9; then
+  echo "A backup is already running; refusing a concurrent snapshot" >&2
+  exit 1
+fi
 
 declare -a stopped_containers=()
+archive_validated=false
+backup_completed=false
+restart_stopped_containers() {
+  local container
+  local -a start_containers=()
+  local -a remaining_containers=()
+
+  if ((${#stopped_containers[@]} == 0)); then
+    return 0
+  fi
+
+  echo "Restoring stopped containers"
+  read -r -a start_containers <<< "${BACKUP_START_CONTAINERS:-${BACKUP_CONTAINERS:-}}"
+  for container in "${start_containers[@]}"; do
+    if [[ " ${stopped_containers[*]} " == *" ${container} "* ]]; then
+      docker start "$container" >/dev/null
+    fi
+  done
+
+  # A configuration mistake must never leave a stopped container behind.
+  for container in "${stopped_containers[@]}"; do
+    if [[ " ${start_containers[*]} " != *" ${container} "* ]]; then
+      remaining_containers+=("$container")
+    fi
+  done
+  if ((${#remaining_containers[@]})); then
+    echo "Start order omitted containers; restoring them now: ${remaining_containers[*]}" >&2
+    docker start "${remaining_containers[@]}" >/dev/null
+  fi
+  stopped_containers=()
+}
+
 cleanup() {
   local status=$?
-  if ((${#stopped_containers[@]})); then
-    docker start "${stopped_containers[@]}" >/dev/null || {
-      echo "Failed to restart one or more containers: ${stopped_containers[*]}" >&2
-      status=1
-    }
+  if ! restart_stopped_containers; then
+    echo "Failed to restart one or more containers" >&2
+    status=1
   fi
-  rm -f "$archive_path" "$manifest_path"
+  if [[ $backup_completed == true ]]; then
+    rm -f "$archive_path" "$manifest_path"
+  elif [[ $archive_validated == true ]]; then
+    echo "Backup did not complete; retaining validated artifacts: $archive_path and $manifest_path" >&2
+  else
+    rm -f "$archive_path" "$manifest_path"
+  fi
   exit "$status"
 }
 trap cleanup EXIT
@@ -62,6 +104,7 @@ trap cleanup EXIT
 read -r -a containers <<< "${BACKUP_CONTAINERS:-}"
 for container in "${containers[@]}"; do
   if [[ $(docker inspect --format '{{.State.Running}}' "$container" 2>/dev/null || true) == true ]]; then
+    echo "Stopping container: $container"
     docker stop --time "$stop_timeout" "$container" >/dev/null
     stopped_containers+=("$container")
   fi
@@ -81,23 +124,34 @@ tar --create --gzip --file - --numeric-owner \
       --symmetric --cipher-algo AES256 --output "$archive_path"
 
 # Validate both the encryption layer and the compressed tar stream locally.
+echo "Validating encrypted archive"
 gpg --batch --yes --pinentry-mode loopback \
   --passphrase-file "$GPG_PASSPHRASE_FILE" --decrypt --output - "$archive_path" \
   | gzip --test
+archive_validated=true
+
+# The filesystem snapshot is now complete. Restore service before the
+# potentially long remote upload, while preserving the validated archive.
+restart_stopped_containers
 
 local_size=$(stat --format=%s "$archive_path")
 local_sha256=$(sha256sum "$archive_path" | awk '{print $1}')
 printf '%s  %s\n' "$local_sha256" "$object_key" > "$manifest_path"
 
+echo "Uploading encrypted archive to Qiniu"
 "$QSHELL_BIN" rput --overwrite "$QINIU_BUCKET" "$object_key" "$archive_path"
 
 remote_size=$("$QSHELL_BIN" stat "$QINIU_BUCKET" "$object_key" \
-  | sed -nE 's/.*"fsize"[[:space:]]*:[[:space:]]*([0-9]+).*/\1/p' \
+  | sed -nE \
+      -e 's/.*"fsize"[[:space:]]*:[[:space:]]*([0-9]+).*/\1/p' \
+      -e 's/^[[:space:]]*[Ff][Ss]ize:[[:space:]]*([0-9]+).*/\1/p' \
   | head -n 1)
 if [[ "$remote_size" != "$local_size" ]]; then
   echo "Remote size verification failed: local=$local_size remote=${remote_size:-missing}" >&2
   exit 1
 fi
 
+echo "Uploading checksum sidecar to Qiniu"
 "$QSHELL_BIN" rput --overwrite "$QINIU_BUCKET" "${object_key}.sha256" "$manifest_path"
+backup_completed=true
 echo "Backup uploaded and verified: $object_key ($local_size bytes)"
